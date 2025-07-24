@@ -1,0 +1,7 @@
+dotnet-sdk-8.0
+libhidapi-dev
+libusb-1.0-0-dev
+libsystemd-dev
+build-essential
+libcurl4-openssl-dev
+libssl-dev

@@ -1,0 +1,444 @@
+[
+  {
+    "name": "TemperatureThreshold",
+    "help": "Defines how fast the fan runs at different temperatures",
+    "fields": [
+      {
+        "name": "UpThreshold",
+        "type": "int16_t",
+        "help": "NBFC will select the next upper threshold as soon as the temperature exceeds *UpThreshold*. in celsius"
+      },
+      {
+        "name": "DownThreshold",
+        "type": "int16_t",
+        "help": "NBFC will select the next lower threshold as soon as the temperature falls below the *DownThreshold*. in celsius"
+      },
+      {
+        "name": "FanSpeed",
+        "type": "float",
+        "valid": "parameter >= 0.0 && parameter <= 100.0",
+        "help": "The fan speed in percent"
+      }
+    ]
+  },
+  {
+    "name": "FanSpeedPercentageOverride",
+    "help": "Overrides the default algorithm to calculate fan speeds",
+    "fields": [
+      {
+        "name": "FanSpeedPercentage",
+        "type": "float",
+        "valid": "parameter >= 0.0 && parameter <= 100.0",
+        "help": "The fan speed in percent"
+      },
+      {
+        "name": "FanSpeedValue",
+        "type": "uint16_t",
+        "help": "Fan fan speed value which will be written to WriteRegister"
+      },
+      {
+        "name": "TargetOperation",
+        "type": "OverrideTargetOperation",
+        "default": "OverrideTargetOperation_ReadWrite",
+        "help": "Defines for which operations the speeds should be overridden:\n\n- Read: Value->Percentage\n- Write: Percentage->Value\n- ReadWrite: both"
+      }
+    ]
+  },
+  {
+    "name": "RegisterWriteConfiguration",
+    "help": "Allows to write to any EC register",
+    "fields": [
+      {
+        "name": "WriteMode",
+        "type": "RegisterWriteMode",
+        "default": "RegisterWriteMode_Set",
+        "help": "Defines how the value will be written:\n\n- And: register = register bitwise_and value\n- Or: register = register bitwise_or value\n- Set register = value\n"
+      },
+      {
+        "name": "WriteOccasion",
+        "type": "RegisterWriteOccasion",
+        "default": "RegisterWriteOccasion_OnInitialization",
+        "help": "Defines when the value should be written:\n\n- OnInitialization: writes the value once upon initialization (everytimee the fan control service is enabled or a config is applied)\n- OnWriteFanSpeed: writes the value everytimee the fan speed is set.\n"
+      },
+      {
+        "name": "Register",
+        "type": "uint8_t",
+        "help": "The register which will be manipulated.",
+        "required": false
+      },
+      {
+        "name": "Value",
+        "type": "uint16_t",
+        "help": "The Value which will be written",
+        "required": false
+      },
+      {
+        "name": "AcpiMethod",
+        "type": "const char*",
+        "help": "The ACPI method to execute",
+        "required": false
+      },
+      {
+        "name": "ResetRequired",
+        "type": "bool",
+        "default": "false",
+        "help": "Defines if the register should be reset before the service is shut down."
+      },
+      {
+        "name": "ResetValue",
+        "type": "uint16_t",
+        "help": "The value which will be written upon reset.",
+        "required": false
+      },
+      {
+        "name": "ResetAcpiMethod",
+        "type": "const char*",
+        "help": "The ACPI method to execute",
+        "required": false
+      },
+      {
+        "name": "ResetWriteMode",
+        "type": "RegisterWriteMode",
+        "default": "RegisterWriteMode_Set",
+        "help": "See WriteMode. Will only be applied on reset. Valid values: Set/And/Or"
+      },
+      {
+        "name": "Description",
+        "type": "const char*",
+        "default": "Mem_Strdup(\"\")",
+        "help": "A short description of what effect the RegisterWriteConfiguration will have"
+      }
+    ]
+  },
+  {
+    "name": "FanConfiguration",
+    "help": "Defines how NBFC controls a fan",
+    "fields": [
+      {
+        "name": "FanDisplayName",
+        "type": "const char*",
+        "help": "Fan display name",
+        "required": false
+      },
+      {
+        "name": "ReadRegister",
+        "type": "uint8_t",
+        "help": "The register from which NBFC reads the fan speed.",
+        "required": false
+      },
+      {
+        "name": "ReadAcpiMethod",
+        "type": "const char*",
+        "help": "The ACPI method for reading the fan speed.",
+        "required": false
+      },
+      {
+        "name": "WriteRegister",
+        "type": "uint8_t",
+        "help": "The register which NBFC uses to control the fan",
+        "required": false
+      },
+      {
+        "name": "WriteAcpiMethod",
+        "type": "const char*",
+        "help": "The ACPI method for setting the fan speed.",
+        "required": false
+      },
+      {
+        "name": "MinSpeedValue",
+        "type": "uint16_t",
+        "help": "The value which puts the fan to the lowest possible speed (usually this stops the fan). Must be an integer between 0 and 255 or 0 and 65535 if ReadWriteWords is `true`. Note: MinSpeedValue does not necessarily have to be smaller than MaxSpeedValue"
+      },
+      {
+        "name": "MaxSpeedValue",
+        "type": "uint16_t",
+        "help": "The value which puts the fan to the highest possible fan speed."
+      },
+      {
+        "name": "MinSpeedValueRead",
+        "type": "uint16_t",
+        "help": "The value which corresponds to the lowest possible fan speed. Will be ignored if IndependentReadMinMaxValues is `false`.",
+        "required": false
+      },
+      {
+        "name": "MaxSpeedValueRead",
+        "type": "uint16_t",
+        "help": "The value which corresponds to the highest possible fan speed. Will be ignored if IndependentReadMinMaxValues is `false`.",
+        "required": false
+      },
+      {
+        "name": "IndependentReadMinMaxValues",
+        "type": "bool",
+        "default": "false",
+        "help": "Defines if independent minimum/maximum values should be applied for read operations"
+      },
+      {
+        "name": "ResetRequired",
+        "type": "bool",
+        "default": "false",
+        "help": "Defines if the EC should be reset before the service is shut down."
+      },
+      {
+        "name": "FanSpeedResetValue",
+        "type": "uint16_t",
+        "help": "Defines the value which will be written to WriteRegister to reset the EC.",
+        "required": false
+      },
+      {
+        "name": "ResetAcpiMethod",
+        "type": "const char*",
+        "help": "The ACPI method for resetting the fan speed.",
+        "required": false
+      },
+      {
+        "name": "TemperatureAlgorithmType",
+        "type": "TemperatureAlgorithmType",
+        "help": "Either 'average', 'max' or 'min'",
+        "required": false
+      },
+      {
+        "name": "Sensors",
+        "type": "array_of(str)",
+        "required": false,
+        "help": "Array of sensor names (as in /sys/class/hwmon/hwmon*/name) or sensor files (like /sys/class/hwmon/hwmon1/temp1_input)"
+      },
+      {
+        "name": "TemperatureThresholds",
+        "type": "array_of(TemperatureThreshold)",
+        "required": false
+      },
+      {
+        "name": "FanSpeedPercentageOverrides",
+        "type": "array_of(FanSpeedPercentageOverride)",
+        "default": "Config_DefaultFanSpeedPercentageOverrides"
+      }
+    ]
+  },
+  {
+    "name": "Sponsor",
+    "help": "Sponsor data",
+    "fields": [
+      {
+        "name": "Name",
+        "type": "const char*",
+        "help": "Sponsor name"
+      },
+      {
+        "name": "Description",
+        "type": "const char*",
+        "help": "Sponsor description",
+        "required": false
+      },
+      {
+        "name": "URL",
+        "type": "const char*",
+        "help": "URL to sponsor"
+      },
+      {
+        "name": "BannerURL",
+        "type": "const char*",
+        "help": "URL to banner"
+      }
+    ]
+  },
+  {
+    "name": "ModelConfig",
+    "help": "",
+    "fields": [
+      {
+        "name": "NotebookModel",
+        "type": "const char*",
+        "help": "The Notebook Model as described in your BIOS. See `sudo dmidecode -s system-product-name`."
+      },
+      {
+        "name": "Author",
+        "type": "const char*",
+        "default": "Mem_Strdup(\"\")",
+        "help": "The Author of the config file. Enter whatever you want."
+      },
+      {
+        "name": "LegacyTemperatureThresholdsBehaviour",
+        "type": "bool",
+        "default": "false"
+      },
+      {
+        "name": "EcPollInterval",
+        "type": "uint16_t",
+        "default": "3000",
+        "help": "Defines how often NBFC polls the EC for changes (in miliseconds)."
+      },
+      {
+        "name": "CriticalTemperature",
+        "type": "int16_t",
+        "default": "75",
+        "help": "If the temperature exceeds this threshold, NBFC will ignore all Temperature threshold elements and set the fan to 100% speed until the temperature drops below (`CriticalTemperature` - `CriticalTemperatureOffset`)"
+      },
+      {
+        "name": "CriticalTemperatureOffset",
+        "type": "uint16_t",
+        "default": "15",
+        "help": "See `CriticalTemperature`"
+      },
+      {
+        "name": "ReadWriteWords",
+        "type": "bool",
+        "help": "If `true`, NBFC will combine two 8 bit registers to one 16-bit register when reading from or writing to the EC registers.",
+        "default": "false"
+      },
+      {
+        "name": "Sponsor",
+        "type": "Sponsor",
+        "help": "Sponsored by data",
+        "required": false
+      },
+      {
+        "name": "FanConfigurations",
+        "type": "array_of(FanConfiguration)",
+        "valid": "parameter.size > 0",
+        "help": "Array of at least one FanConfiguration"
+      },
+      {
+        "name": "RegisterWriteConfigurations",
+        "type": "array_of(RegisterWriteConfiguration)",
+        "required": false,
+        "help": "Array of RegisterWriteConfiguration"
+      }
+    ]
+  },
+  {
+    "name": "FanTemperatureSourceConfig",
+    "help": "TODO",
+    "fields": [
+      {
+        "name": "FanIndex",
+        "type": "uint8_t",
+        "help": "Specify for which fan the config should be applied"
+      },
+      {
+        "name": "TemperatureAlgorithmType",
+        "type": "TemperatureAlgorithmType",
+        "help": "Either 'average', 'max' or 'min'",
+        "required": false
+      },
+      {
+        "name": "Sensors",
+        "type": "array_of(str)",
+        "required": false,
+        "help": "Array of sensor names (as in /sys/class/hwmon/hwmon*/name) or sensor files (like /sys/class/hwmon/hwmon1/temp1_input)"
+      }
+    ]
+  },
+  {
+    "name": "ServiceConfig",
+    "help": "Main configuration file of nbfc_service",
+    "fields": [
+      {
+        "name": "SelectedConfigId",
+        "type": "const char*",
+        "help": "The selected config model. This equals the basename of a notebook model configuration file."
+      },
+      {
+        "name": "EmbeddedControllerType",
+        "type": "EmbeddedControllerType",
+        "help": "Either `ec_sys` for using the `ec_sys` kernel module, `acpi_ec` for using the `acpi_ec` kernel module, or `dev_port` for an alternative implementation using `/dev/port` without depending on kernel modules.",
+        "required": false
+      },
+      {
+        "name": "TargetFanSpeeds",
+        "type": "array_of(float)",
+        "help": "This holds the fixed speed of the fans. A value of `-1` means the fan should be left in auto mode.",
+        "required": false
+      },
+      {
+        "name": "FanTemperatureSources",
+        "type": "array_of(FanTemperatureSourceConfig)",
+        "help": "TODO",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "ServiceState",
+    "help": "State file of the service",
+    "fields": [
+      {
+        "name": "TargetFanSpeeds",
+        "type": "array_of(float)",
+        "help": "This holds the fixed speed of the fans. A value of `-1` means the fan should be left in auto mode.",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "FanInfo",
+    "help": "",
+    "fields": [
+      {
+        "name": "Name",
+        "type": "const char*",
+        "help": ""
+      },
+      {
+        "name": "Temperature",
+        "type": "float",
+        "help": ""
+      },
+      {
+        "name": "AutoMode",
+        "type": "bool",
+        "help": ""
+      },
+      {
+        "name": "Critical",
+        "type": "bool",
+        "help": ""
+      },
+      {
+        "name": "CurrentSpeed",
+        "type": "float",
+        "help": ""
+      },
+      {
+        "name": "TargetSpeed",
+        "type": "float",
+        "help": ""
+      },
+      {
+        "name": "RequestedSpeed",
+        "type": "float",
+        "help": ""
+      },
+      {
+        "name": "SpeedSteps",
+        "type": "uint16_t",
+        "help": ""
+      }
+    ]
+  },
+  {
+    "name": "ServiceInfo",
+    "help": "",
+    "fields": [
+      {
+        "name": "PID",
+        "type": "int",
+        "help": ""
+      },
+      {
+        "name": "SelectedConfigId",
+        "type": "const char*",
+        "help": ""
+      },
+      {
+        "name": "ReadOnly",
+        "type": "bool",
+        "help": ""
+      },
+      {
+        "name": "Fans",
+        "type": "array_of(FanInfo)",
+        "help": ""
+      }
+    ]
+  }
+]

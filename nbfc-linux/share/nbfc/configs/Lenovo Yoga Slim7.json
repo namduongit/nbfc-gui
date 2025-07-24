@@ -1,0 +1,45 @@
+{
+ "LegacyTemperatureThresholdsBehaviour": true,
+ "NotebookModel": "Lenovo Yoga Slim7",
+ "Author": "dumprop",
+ "ReadWriteWords": false,
+ "CriticalTemperature": 96,
+ "FanConfigurations": [
+	{
+	 "ReadRegister": 47,
+	 "WriteRegister": 47,
+	 "MinSpeedValue": 0,
+	 "MaxSpeedValue": 7,
+	 "ResetRequired": true,
+	 "FanSpeedResetValue": 255,
+	 "FanDisplayName": "CPU",
+	 "TemperatureThresholds": [
+	  {
+	   "UpThreshold": 80,
+	   "DownThreshold": 0,
+	   "FanSpeed": 0.0
+	  },
+	  {
+	   "UpThreshold": 80,
+	   "DownThreshold": 85,
+	   "FanSpeed": 15.0
+	  },
+	  {
+	   "UpThreshold": 90,
+	   "DownThreshold": 85,
+	   "FanSpeed": 30.0
+	  },
+	  {
+	   "UpThreshold": 95,
+	   "DownThreshold": 90,
+	   "FanSpeed": 45.0
+	  },
+	  {
+	   "UpThreshold": 100,
+	   "DownThreshold": 95,
+	   "FanSpeed": 60.0
+	  }
+	 ]
+	}
+ ]
+}

@@ -1,0 +1,220 @@
+.nh
+.TH "EC_PROBE" "1" "MAY 2025" "Notebook FanControl @VERSION@"
+.SH NAME
+.PP
+ec_probe \- probing tool for the embedded controller
+
+.SH DESCRIPTION
+.PP
+Probing tool for the embedded controller
+
+.SH SYNOPSIS
+.PP
+.B ec_probe
+.RB { read
+|
+.B write
+|
+.B dump
+|
+.B load
+|
+.B monitor
+|
+.B watch
+|
+.B acpi_call
+|
+.BR shell }
+.RI [ OPTIONS ]
+
+.SH OPTIONS
+.PP
+.BR -h ", " \-\-help
+.RS
+Show the help message and exit
+.RE
+
+.PP
+.B \-\-version
+.RS
+Show program's version number and exit
+.RE
+
+.PP
+.BR \-e ", " \-\-embedded\-controller "=[" dev_port , ec_sys , acpi_ec ]
+.RS
+Specify embedded controller to use
+.IP \(bu 2
+.BR ec_sys :
+Use the ec_sys kernel module for writing to the embedded controller.
+.IP \(bu 2
+.BR acpi_ec :
+Use the acpi_ec kernel module for writing to the embedded controller.
+.IP \(bu 2
+.BR dev_port :
+Write to the embedded controller using /dev/port.
+.RE
+
+.SH COMMANDS
+.PP
+.B dump
+.RI [ OPTIONS ]
+.RS
+Dump all EC registers
+
+.BR \-c ", " \-\-color
+.RS
+Force colored output.
+.RE
+
+.BR \-C ", " \-\-no-color
+.RS
+Disable colored output.
+.RE
+.RE
+
+.PP
+.B load
+.I FILE
+.RS
+Load a previously made dump into the embedded controller.
+.RE
+
+.PP
+.B read
+.RI [ OPTIONS ]
+.I REGISTER
+.RS
+Reads 
+.I REGISTER
+from the embedded controller and prints out the value.
+
+.BR \-w ", " \-\-word
+.RS
+If given, the value of
+.I REGISTER
+and the value of
+.I REGISTER + 1
+is read and combined into a single value.
+.RE
+.RE
+
+.PP
+.B write
+.RI [ OPTIONS ]
+.I REGISTER
+.I VALUE
+.RS
+Writes
+.I VALUE
+to
+.I REGISTER
+of the embedded controller.
+
+.BR \-w ", " \-\-word
+.RS
+If given,
+.I VALUE
+is written into a combined register of 
+.I REGISTER
+and
+.IR "REGISTER + 1" .
+.RE
+.RE
+
+.PP
+.B monitor
+.RI [ OPTIONS ]
+.RS
+Monitor all embedded controller registers for changes.
+
+.BR \-i ", " \-\-interval
+.I SECONDS
+.RS
+Sets the update interval in seconds.
+.RE
+
+.BR \-t ", " \-\-timespan
+.I SECONDS
+.RS
+Sets how many seconds the program will run.
+.RE
+
+.BR \-r ", " \-\-report
+.I FILE
+.RS
+Save the monitored results to a CSV file.
+.RE
+
+.BR \-c ", " \-\-clearly
+.RS
+With
+.BR \-r | \-\-report :
+Blanks out consecutive duplicate readings when writing to the CSV file.
+.RE
+
+.BR \-d ", " \-\-decimal
+.RS
+With
+.BR \-r | \-\-report :
+Output results in decimal format instead of hexadecimal format
+.RE
+.RE
+
+.PP
+.B watch 
+.RI [ OPTIONS ]
+.RS
+Monitor all embedded controller registers for changes (alternative version).
+
+.BR \-i ", " \-\-interval
+.I SECONDS
+.RS
+Sets the update interval in seconds.
+.RE
+
+.BR \-t ", " \-\-timespan
+.I SECONDS
+.RS
+Sets how many seconds the program will run.
+.RE
+.RE
+
+.PP
+.B acpi_call
+.I METHOD
+.RI [ ARGUMENT ...]
+.RS
+Call an ACPI Method.
+
+The maximum number of arguments is 8.
+
+Example:
+.RS
+ec_probe acpi_call '\\_SB.PCI0.LPCB.EC0.SFSD' 0xFF
+.RE
+.RE
+
+.PP
+.B shell
+.RS
+Read commands from STDIN
+.RE
+
+All input values are interpreted as decimal numbers by default.
+Hexadecimal values may be entered by prefixing them with "0x".
+
+.SH BUGS
+.PP
+Report bugs to https://github.com/nbfc\-/nbfc\-linux
+
+.SH AUTHOR
+.PP
+Benjamin Abendroth (braph93@gmx.de)
+
+.SH SEE ALSO
+.BR nbfc (1),
+.BR nbfc_service (1),
+.BR nbfc_service.json (5),
+.BR fancontrol (1)

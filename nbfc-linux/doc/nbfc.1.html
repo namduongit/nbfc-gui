@@ -1,0 +1,160 @@
+<h1>NAME</h1>
+<p>nbfc - Notebook FanControl client</p>
+<h1>DESCRIPTION</h1>
+<p>This program is used to control the NoteBook FanControl service.</p>
+<h1>SYNOPSIS</h1>
+<p><strong>nbfc</strong> {<strong>start</strong> | <strong>stop</strong>
+| <strong>restart</strong> | <strong>status</strong> |
+<strong>config</strong> | <strong>set</strong> | <strong>update</strong>
+| <strong>help</strong>} [<em>OPTIONS</em>]</p>
+<h1>OPTIONS</h1>
+<p><strong>-h</strong>, <strong>--help</strong></p>
+<blockquote>
+<p>Show this help message and exit.</p>
+</blockquote>
+<p><strong>--version</strong></p>
+<blockquote>
+<p>Show program's version number and exit.</p>
+</blockquote>
+<h1>COMMANDS</h1>
+<p><strong>start</strong> [<em>OPTIONS</em>]</p>
+<blockquote>
+<p>Start the service.</p>
+<p><strong>-r</strong>, <strong>--read-only</strong></p>
+<blockquote>
+<p>Start in read-only mode.</p>
+</blockquote>
+</blockquote>
+<p><strong>stop</strong> [<em>OPTIONS</em>]</p>
+<blockquote>
+<p>Stop the service.</p>
+</blockquote>
+<p><strong>restart</strong> [<em>OPTIONS</em>]</p>
+<blockquote>
+<p>Restart the service.</p>
+<p><strong>-r</strong>, <strong>--read-only</strong></p>
+<blockquote>
+<p>Start in read-only mode.</p>
+</blockquote>
+</blockquote>
+<p><strong>status</strong> [<em>OPTIONS</em>]</p>
+<blockquote>
+<p>Show the service status.</p>
+<p><strong>-a</strong>, <strong>--all</strong></p>
+<blockquote>
+<p>Show service and fan status (default).</p>
+</blockquote>
+<p><strong>-s</strong>, <strong>--service</strong></p>
+<blockquote>
+<p>Show service status.</p>
+</blockquote>
+<p><strong>-f</strong>, <strong>--fan</strong> <em>FAN INDEX</em></p>
+<blockquote>
+<p>Show fan status.</p>
+</blockquote>
+<p><strong>-w</strong>, <strong>--watch</strong> <em>SECONDS</em></p>
+<blockquote>
+<p>Show status periodically.</p>
+</blockquote>
+</blockquote>
+<p><strong>config</strong> [<em>OPTIONS</em>]</p>
+<blockquote>
+<p>List or apply configs.</p>
+<p><strong>-l</strong>, <strong>--list</strong></p>
+<blockquote>
+<p>List all available configs (default).</p>
+</blockquote>
+<p><strong>-r</strong>, <strong>--recommend</strong></p>
+<blockquote>
+<p>List configs which may work for your device.</p>
+</blockquote>
+<p><strong>-s</strong>, <strong>--set</strong> <em>CONFIG</em></p>
+<blockquote>
+<p>Set a config.</p>
+</blockquote>
+<p><strong>-a</strong>, <strong>--apply</strong> <em>CONFIG</em></p>
+<blockquote>
+<p>Set a config and enable fan control.</p>
+</blockquote>
+</blockquote>
+<p><strong>set</strong> [<em>OPTIONS</em>]</p>
+<blockquote>
+<p>Control fan speed.</p>
+<p><strong>-a</strong>, <strong>--auto</strong></p>
+<blockquote>
+<p>Set fan speed to 'auto'.</p>
+</blockquote>
+<p><strong>-s</strong>, <strong>--speed</strong> <em>PERCENT</em></p>
+<blockquote>
+<p>Set fan speed to PERCENT.</p>
+</blockquote>
+<p><strong>-f</strong>, <strong>--fan</strong> <em>FAN INDEX</em></p>
+<blockquote>
+<p>Fan index (zero based). If not given, all available fans are set to
+speed.</p>
+</blockquote>
+</blockquote>
+<p><strong>update</strong> [<em>OPTIONS</em>]</p>
+<blockquote>
+<p>Download new configuration files.</p>
+<p><strong>-p</strong>, <strong>--parallel</strong> <em>NUM</em></p>
+<blockquote>
+<p>Set the number of parallel downloads.</p>
+</blockquote>
+<p><strong>-q</strong>, <strong>--quiet</strong></p>
+<blockquote>
+<p>Set quiet mode.</p>
+</blockquote>
+</blockquote>
+<p><strong>help</strong></p>
+<blockquote>
+<p>Show help.</p>
+</blockquote>
+<h1>FILES</h1>
+<p><em>/etc/nbfc.json</em></p>
+<blockquote>
+<p>The main configuration file for nbfc_service. See
+<strong>nbfc_service.json</strong>(5) for further details.</p>
+</blockquote>
+<p><em>/var/run/nbfc_service.pid</em></p>
+<blockquote>
+<p>File containing the PID of current running nbfc_service.</p>
+</blockquote>
+<p><em>/var/run/nbfc_service.socket</em></p>
+<blockquote>
+<p>Socket file of nbfc_service.</p>
+</blockquote>
+<p><em>/usr/share/nbfc/configs/*.json</em></p>
+<blockquote>
+<p>Configuration files for various notebook models. See
+<strong>nbfc_service.json</strong>(5) for further details.</p>
+</blockquote>
+<p><em>/usr/share/nbfc/model_support.json</em></p>
+<blockquote>
+<p>Model support database. This file maps notebook model names to
+configuration files.</p>
+</blockquote>
+<p><em>/var/lib/nbfc/configs/*.json</em></p>
+<blockquote>
+<p>Configuration files downloaded from the internet. Files in this
+directory take precedence over those in
+<em>/usr/share/nbfc/configs</em>.</p>
+</blockquote>
+<p><em>/var/lib/nbfc/model_support.json</em></p>
+<blockquote>
+<p>Model support database downloaded from the internet. Both
+<em>/var/lib/nbfc/model_support.json</em> and
+<em>/usr/share/nbfc/model_support.json</em> are taken into account.</p>
+</blockquote>
+<p><em>/var/lib/nbfc/state.json</em></p>
+<blockquote>
+<p>State file of nbfc_service. This holds the current fan speeds.</p>
+</blockquote>
+<h1>BUGS</h1>
+<p>Report bugs to https://github.com/nbfc-/nbfc-linux</p>
+<h1>AUTHOR</h1>
+<p>Benjamin Abendroth (braph93@gmx.de)</p>
+<h1>SEE ALSO</h1>
+<p><strong>nbfc_service</strong>(1),
+<strong>nbfc_service.json</strong>(5), <strong>ec_probe</strong>(1),
+<strong>fancontrol</strong>(1)</p>
